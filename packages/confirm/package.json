@@ -1,0 +1,25 @@
+{
+  "name": "@lyngs-ui/confirm",
+  "version": "0.1.0",
+  "description": "A confirm dialog component, based on Vue 3.0 + Typescript.",
+  "author": "https://github.com/ShookLyngs",
+  "main": "index.ts",
+  "license": "MIT",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build:confirm": "vue-cli-service build --dest dist --target lib --name maucash-model ./src/packages/confirm/index.ts"
+  },
+  "dependencies": {
+    "core-js": "^3.6.5",
+    "vue": "^3.0.0-0"
+  },
+  "devDependencies": {
+    "@vue/cli-plugin-babel": "~4.5.0",
+    "@vue/cli-plugin-typescript": "^4.5.4",
+    "@vue/cli-service": "~4.5.0",
+    "@vue/compiler-sfc": "^3.0.0-0",
+    "less": "^3.0.4",
+    "less-loader": "^5.0.0",
+    "typescript": "~3.9.3"
+  }
+}
