@@ -1,7 +1,7 @@
 <template>
   <transition
     name="fade"
-    @after-enter="onAfterEnter"
+    @before-enter="onAfterEnter"
     @before-leave="onBeforeLeave"
   >
     <div
@@ -17,7 +17,7 @@
 
 <script lang="ts">
 
-import { defineComponent, ref } from 'vue';
+import { defineComponent, ref, onMounted } from 'vue';
 
 interface ControlParentsClasses {
   (
@@ -87,6 +87,14 @@ export default defineComponent({
       controlParentsClasses('remove', 'ls-modal-parent-hidden', props.pop);
       context.emit('after-leave');
     };
+
+    onMounted(() => {
+      if (props.show) {
+        onAfterEnter();
+      } else {
+        onBeforeLeave();
+      }
+    });
 
     return {
       wrapper,

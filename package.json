@@ -28,5 +28,6 @@
     "less": "^3.0.4",
     "less-loader": "^5.0.0",
     "typescript": "~3.9.3"
-  }
+  },
+  "types": "types/confirm.d.ts"
 }

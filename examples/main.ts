@@ -4,7 +4,7 @@ import App from './App.vue';
 // create instance of App
 const app = createApp(App);
 
-// import confirm dialog component, then provide to global
+// import(confirm-component): provide to global
 import Confirm from '{packages}/confirm';
 app.use(Confirm);
 

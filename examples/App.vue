@@ -1,28 +1,18 @@
 <template>
   <div>
-    <ul>
-      <li v-for="item in 500" :key="item">
-        <button @click="openConfirm">Open Confirm({{ item }})</button>
-      </li>
-    </ul>
+    <home></home>
   </div>
 </template>
 
 <script lang="ts">
 
 import { defineComponent } from 'vue';
+import Home from '{examples}/pages/Home.vue';
 
 export default defineComponent({
   name: 'App',
-  components: {},
-  setup() {
-    const openConfirm = (): void => {
-      console.log('button triggered');
-    };
-
-    return {
-      openConfirm
-    };
+  components: {
+    Home,
   },
 });
 </script>

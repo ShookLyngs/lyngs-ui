@@ -18,7 +18,8 @@ module.exports = {
       .set('@', resolve('src'))
       .set('{examples}', resolve('examples'))
       .set('{packages}', resolve('packages'))
-      .set('{public}', resolve('public'));
+      .set('{public}', resolve('public'))
+      .set('{types}', resolve('types'));
 
     config.module
       .rule('js').include.add(resolve('packages')).end()

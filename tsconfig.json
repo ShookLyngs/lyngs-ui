@@ -1,7 +1,7 @@
 {
   "compilerOptions": {
     "target": "es5",
-    "module": "esnext",
+    "module": "es2015",
     "strict": true,
     "jsx": "preserve",
     "importHelpers": true,
@@ -13,6 +13,7 @@
     "sourceMap": true,
     "baseUrl": ".",
     "types": [
+      "types/index.d.ts",
       "webpack-env"
     ],
     "paths": {
@@ -20,13 +21,16 @@
         "src/*"
       ],
       "{examples}/*": [
-        "./examples/*"
+        "examples/*"
       ],
       "{packages}/*": [
-        "./packages/*"
+        "packages/*"
       ],
       "{public}/*": [
-        "./public/*"
+        "public/*"
+      ],
+      "{types}/*": [
+        "types/*"
       ]
     },
     "lib": [
