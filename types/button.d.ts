@@ -1,7 +1,8 @@
 
 export interface Button {
   text?: string;
-  icon?: string;
+  prefix?: string;
+  suffix?: string;
   allowHtml?: boolean;
 }
 

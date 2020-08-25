@@ -1,27 +1,9 @@
 
-import { ButtonList } from './button';
+import { DialogOptions } from './dialog';
+import { ComponentPublicInstance } from "vue";
 
-export type DialogOptionType = 'flex' | 'inline';
-
-export interface DialogOptions {
-  type?: DialogOptionType;
-  title?: string;
-  content?: string;
-  buttons?: ButtonList;
-  width?: number | string;
-  maxWidth?: number | string;
-  allowHtml?: boolean;
-}
-
-export interface DialogStatus {
-  show?: boolean;
-}
-
-export interface ConfirmInstance {
+export interface Confirm {
   open?: (options: DialogOptions) => void;
   close?: () => void;
 }
-
-export interface ConfirmOptionList {
-  [index: number]: DialogOptions & DialogStatus;
-}
+export type ConfirmInstance = ComponentPublicInstance & Confirm;
