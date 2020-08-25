@@ -1,5 +1,5 @@
 <template>
-  <div class="ls-button">
+  <div class="ls-button" tabindex="-1" @click="onClick">
     <slot name="prefix">
       <i v-if="prefix" :class="prefix"></i>
     </slot>
@@ -14,11 +14,15 @@
 
 <script lang="ts">
 
-import { defineComponent, ref, onMounted } from 'vue';
+import { defineComponent } from 'vue';
 
 export default defineComponent({
   name: "Button",
   props: {
+    type: {
+      type: String,
+      default: '',
+    },
     text: {
       type: String,
       default: '',
@@ -36,11 +40,11 @@ export default defineComponent({
       default: false,
     },
   },
-  setup(props) {
-
+  setup(props, context) {
+    const onClick = () => context.emit('click');
 
     return {
-
+      onClick,
     };
   },
 });

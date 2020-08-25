@@ -3,6 +3,7 @@
     class="ls-dialog"
     :class="dialogClasses"
     :style="dialogStyle"
+    v-if="show"
   >
     <div class="ls-dialog-header">
       <slot name="header">
@@ -30,7 +31,15 @@
             class="ls-dialog-action-button"
             v-for="(button, index) in buttons"
             :key="Date.now() + index"
-          >{{ button.text }}</li>
+          >
+            <ls-button
+              :text="button.text"
+              :prefix="button.prefix"
+              :suffix="button.suffix"
+              :allowHtml="button.allowHtml"
+              @click="onClickButton(button)"
+            ></ls-button>
+          </li>
         </ul>
       </slot>
     </div>
@@ -39,10 +48,28 @@
 
 <script lang="ts">
 
+import ButtonComponent from '{packages}/button';
 import { defineComponent, computed } from 'vue';
+import { Button } from 'types';
+
+const defaults = () => {
+  return {
+    buttons: [
+      { text: 'Cancel' },
+      { text: 'Confirm' },
+    ],
+    types: [
+      'flex',
+      'inline',
+    ],
+  };
+};
 
 export default defineComponent({
   name: "Dialog",
+  components: {
+    LsButton: ButtonComponent,
+  },
   props: {
     show: {
       type: Boolean,
@@ -58,7 +85,7 @@ export default defineComponent({
     },
     buttons: {
       type: Array,
-      default: () => [],
+      default: () => defaults().buttons,
     },
     type: {
       type: String,
@@ -76,18 +103,12 @@ export default defineComponent({
       type: Boolean,
       default: false,
     },
+    closeOnClick: {
+      type: Boolean,
+      default: true,
+    },
   },
-  setup(props) {
-    const defaults = {
-      buttons: [
-        { text: 'Cancel' },
-        { text: 'Confirm' },
-      ],
-      types: [
-        'flex',
-        'inline',
-      ],
-    };
+  setup(props, context) {
 
     const dialogWidth = computed((): string => {
       const width = props.width;
@@ -118,9 +139,10 @@ export default defineComponent({
     });
 
     const dialogClasses = computed(() => {
-      const classes: string[] = [];
+      const classes: string[] = [],
+            types             = defaults().types;
 
-      if (props.type && defaults.types.includes(props.type)) {
+      if (props.type && types.includes(props.type)) {
         classes.push(`is-${props.type}`);
       }
 
@@ -135,12 +157,12 @@ export default defineComponent({
       console.log('close');
     };
 
-    const onClickButton = () => {
-      console.log('click button');
+    const onClickButton = (button: Button) => {
+      if (button && button.onClick) button.onClick();
+      context.emit('click', button);
     };
 
     return {
-      defaults,
       dialogMaxWidth,
       dialogStyle,
       dialogClasses,

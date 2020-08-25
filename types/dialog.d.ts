@@ -8,11 +8,13 @@ export interface DialogProps {
   width?: number | string;
   maxWidth?: number | string;
   allowHtml?: boolean;
-  showModal?: boolean;
+  closeOnClick?: boolean;
 }
 
 export interface DialogStatus {
+  id: number;
   show?: boolean;
+  showModal?: boolean;
 }
 
 export type DialogInstance = DialogOptions & DialogStatus;

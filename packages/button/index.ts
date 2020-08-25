@@ -1,5 +1,5 @@
 import { App, Plugin } from 'vue';
-import Component from './src/Modal.vue';
+import Component from './src/Button.vue';
 
 const component: Plugin = {
   ...Component,

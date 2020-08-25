@@ -24,6 +24,8 @@ export default defineComponent({
         confirm.open({
           title: 'Delete',
           content: 'Are you sure you wanna delete: <b>Chaos(871080)</b> ?',
+          width: '400px',
+          allowHtml: true,
         });
       }
     };
