@@ -26,8 +26,11 @@
     <div class="ls-dialog-footer">
       <slot name="footer">
         <ul class="ls-dialog-actions">
-          <li class="ls-dialog-action-button">cancel</li>
-          <li class="ls-dialog-action-button">confirm</li>
+          <li
+            class="ls-dialog-action-button"
+            v-for="(button, index) in buttons"
+            :key="Date.now() + index"
+          >{{ button.text }}</li>
         </ul>
       </slot>
     </div>

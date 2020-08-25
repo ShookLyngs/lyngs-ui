@@ -1,16 +1,18 @@
-import { createApp, App, ComponentPublicInstance } from 'vue';
-import Confirm from './src/Confirm.vue';
+import { createApp, App, Plugin } from 'vue';
+import Component from './src/Confirm.vue';
+import { ConfirmInstance } from 'types';
 
-const getInstance = (element?: string | Element): ComponentPublicInstance => {
-  return createApp(Confirm).mount(element ?? document.body);
+const getInstance = (element?: string | Element) => {
+  return createApp(Component).mount(element ?? document.body);
 };
 
-export default {
+const component: Plugin = {
+  ...Component,
   install: (app: App): void => {
     const element = document.createElement('div');
     document.body.appendChild(element);
 
-    app.provide('$confirm', getInstance(element));
+    app.provide<ConfirmInstance>('$confirm', getInstance(element));
   },
-  default: Confirm
 };
+export default component;

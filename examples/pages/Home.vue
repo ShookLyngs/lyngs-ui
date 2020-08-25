@@ -13,22 +13,14 @@
 import { defineComponent, inject } from 'vue';
 import { ConfirmInstance } from 'types';
 
-
-export const getConfirmInstanceStructure = (): ConfirmInstance => {
-  return {
-    open: (options) => void 0,
-    close: () => void 0,
-  };
-};
-
 export default defineComponent({
   name: 'Home',
   components: {},
   setup () {
-    const confirm = inject('$confirm', getConfirmInstanceStructure());
+    const confirm = inject<ConfirmInstance>('$confirm');
 
     const openConfirm = (): void => {
-      if (typeof confirm.open === 'function') {
+      if (confirm && typeof confirm.open === 'function') {
         confirm.open({
           title: 'Delete',
           content: 'Are you sure you wanna delete: <b>Chaos(871080)</b> ?',

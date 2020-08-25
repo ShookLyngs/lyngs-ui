@@ -1,7 +1,10 @@
-import { App } from 'vue';
+import { App, Plugin } from 'vue';
 import Component from './src/Dialog.vue';
 
-export default Component;
-export const install = (app: App): void => {
-  app.component('LsDialog', Component);
+const component: Plugin =  {
+  ...Component,
+  install: (app: App): void => {
+    app.component('LsDialog', Component);
+  },
 };
+export default component;

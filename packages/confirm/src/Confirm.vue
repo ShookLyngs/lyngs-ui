@@ -1,5 +1,5 @@
 <template>
-  <ls-modal :show="modal.show">
+  <ls-modal :show="isShowModal">
     <ls-dialog
       width="400px"
       title="Delete"
@@ -12,8 +12,8 @@
 
 import Modal from '{packages}/modal';
 import Dialog from '{packages}/dialog';
-import { reactive, ref } from 'vue';
-import { DialogStatus, DialogOptions, ConfirmOptionList } from 'types';
+import { reactive, ref, computed } from 'vue';
+import { DialogProps, DialogInstance } from 'types';
 
 export default {
   name: "Confirm",
@@ -25,21 +25,24 @@ export default {
 
   },
   setup() {
-    const dialogOptionsTemplate = (): DialogOptions & DialogStatus => {
-      return {
-        show: false,
-      };
-    };
-    const modal = reactive({
-      show: false,
+    const instances = ref<DialogInstance[]>([]);
+
+    const current = computed((): DialogInstance => {
+      const list = instances.value;
+      return list.length ? list[list.length - 1] : null;
     });
 
-    const dialogInstances: Array<DialogOptions & DialogStatus> = [];
-    const instances = ref(dialogInstances);
+    const isShowModal = computed((): boolean => !!current?.value?.showModal);
 
-    const open = (options: DialogOptions) => {
-      modal.show = !modal.show;
-      instances.value.push({ ...dialogOptionsTemplate(), ...options });
+    const template = (): DialogInstance => {
+      return {
+        show: false,
+        showModal: true,
+      };
+    };
+
+    const open = (options: DialogProps): void => {
+      instances.value.push({ ...template(), ...options })
     };
 
     const close = () => {
@@ -47,8 +50,9 @@ export default {
     };
 
     return {
-      modal,
       instances,
+      current,
+      isShowModal,
       open,
       close,
     };
