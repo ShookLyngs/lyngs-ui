@@ -25,7 +25,7 @@ export default defineComponent({
       default: 'normal',
       validator(value: string): boolean {
         return [ 'normal', 'theme', 'success', 'warning', 'danger', 'info' ].includes(value);
-      }
+      },
     },
     shape: {
       type: String,
