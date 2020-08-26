@@ -20,7 +20,7 @@
 import Modal from '{packages}/modal';
 import Dialog from '{packages}/dialog';
 import { ref, computed } from 'vue';
-import { DialogInstance, IsShowConfirmDialog, ConfirmTemplate, OpenConfirm } from 'types';
+import { DialogInstance, IsShowConfirmDialog, ConfirmTemplate, OpenConfirm, CloseConfirm } from 'types';
 
 export default {
   name: "Confirm",
@@ -52,11 +52,21 @@ export default {
     };
 
     const open: OpenConfirm = (options) => {
-      instances.value.push({ ...template(), ...options })
+      const merged = { ...template(), ...options };
+      instances.value.push(merged);
+
+      return merged.id;
     };
 
-    const close = () => {
-      console.log('close');
+    const close: CloseConfirm = (id) => {
+      const list = instances.value;
+      for (let i = 0; i < list.length; i++) {
+        if (list[i].id === id) {
+          list.splice(i, 1);
+          return true;
+        }
+      }
+      return false;
     };
 
     return {

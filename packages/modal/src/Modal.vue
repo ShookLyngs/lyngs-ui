@@ -1,6 +1,6 @@
 <template>
   <transition
-    name="fade"
+    name="ls-fade"
     @before-enter="onAfterEnter"
     @before-leave="onBeforeLeave"
   >
@@ -107,39 +107,4 @@ export default defineComponent({
 </script>
 
 <style lang="less">
-
-// modal background
-.ls-modal-wrapper {
-  position: fixed;
-  top: 0;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  background-color: rgba(0, 0, 0, 0.4);
-  z-index: 100;
-
-  &.is-show {
-    opacity: 1;
-  }
-}
-
-//
-.ls-modal-parent-hidden {
-  overflow: hidden;
-}
-
-// <Transition> Fading transition classes
-.fade-enter-active,
-.fade-leave-active {
-  transition: opacity .3s ease-in;
-}
-.fade-enter-from,
-.fade-leave-to {
-  opacity: 0;
-}
-.fade-leave-from,
-.fade-enter-to {
-  opacity: 1;
-}
-
 </style>

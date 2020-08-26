@@ -1,0 +1,80 @@
+
+@import "index";
+
+// button shapes
+.ls-button-text {
+  padding: 8px 0;
+  margin: 0;
+  line-height: 1;
+  cursor: pointer;
+  text-align: center;
+  white-space: nowrap;
+  box-sizing: border-box;
+  transition: all .1s ease;
+  font-size: #size[small];
+
+  &:not(.is-disabled):not([disabled]) {
+    &:hover {
+      opacity: .8;
+    }
+  }
+}
+.ls-button-solid {
+  .ls-button-text();
+  padding: 8px 12px;
+  border: none;
+}
+
+// button border radius levels
+.ls-button-square {
+  border-radius: #radius[smaller];
+}
+.ls-button-radius {
+  border-radius: #radius[middle];
+}
+.ls-button-capsule {
+  border-radius: #radius[capsule];
+}
+
+// button types
+.ls-button-theme {
+  background-color: #theme[normal];
+}
+.ls-button-normal {
+  background-color: #normal[normal];
+}
+
+// open button class
+.ls-button {
+  .ls-button-radius();
+  display: inline-block;
+  user-select: none;
+  outline: none;
+
+  // types
+  &.type-theme {
+    .ls-button-theme();
+  }
+  &.type-normal {
+    .ls-button-normal();
+  }
+  // shapes
+  &.shape-text {
+    .ls-button-text();
+  }
+  &.shape-solid {
+    .ls-button-solid();
+  }
+  // borders
+  &.radius-radius {
+    .ls-button-radius();
+  }
+  &.radius-capsule {
+    .ls-button-capsule();
+  }
+
+  // space
+  & + .ls-button {
+    margin-left: 8px;
+  }
+}

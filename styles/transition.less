@@ -1,0 +1,16 @@
+
+@import "index";
+
+// <Transition> Fading transition classes
+.ls-fade-enter-active,
+.ls-fade-leave-active {
+  transition: opacity .3s ease-in;
+}
+.ls-fade-enter-from,
+.ls-fade-leave-to {
+  opacity: 0;
+}
+.ls-fade-leave-from,
+.ls-fade-enter-to {
+  opacity: 1;
+}

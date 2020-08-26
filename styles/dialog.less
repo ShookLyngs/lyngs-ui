@@ -1,0 +1,55 @@
+
+@import "index";
+
+// dialog-root class
+@background-color: #light[strongest];
+@side-space: 12px;
+.ls-dialog {
+  position: relative;
+  margin: 0 auto;
+  top: 50%;
+  transform: translate3d(0, -50%, 0);
+  border-radius: 3px;
+  background-color: @background-color;
+
+  .ls-dialog-header,
+  .ls-dialog-footer {
+    .ls-flex();
+    padding: 0 12px;
+    justify-content: space-between;
+  }
+  .ls-dialog-header {
+    line-height: 40px;
+    height: 40px;
+  }
+  .ls-dialog-footer {
+    padding: 10px;
+    justify-content: flex-end;
+  }
+  .ls-dialog-actions {
+    padding: 0;
+    margin: 0;
+    list-style: none;
+  }
+  .ls-dialog-content-container {
+    padding: 0 20px;
+  }
+
+  &.is-flex {
+    .ls-flex-column();
+    max-height: calc(100% - (@side-space * 4));
+    max-width: calc(100% - (@side-space * 2));
+
+    .ls-dialog-content {
+      flex: auto;
+      overflow-y: auto;
+    }
+  }
+  &.is-inline {
+    display: inline-block;
+    max-width: 100%;
+    left: 50%;
+    transform: translate3d(-50%, -50%, 0);
+    word-wrap: break-word;
+  }
+}

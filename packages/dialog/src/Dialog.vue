@@ -27,19 +27,15 @@
     <div class="ls-dialog-footer">
       <slot name="footer">
         <ul class="ls-dialog-actions">
-          <li
-            class="ls-dialog-action-button"
+          <ls-button
             v-for="(button, index) in buttons"
             :key="Date.now() + index"
-          >
-            <ls-button
-              :text="button.text"
-              :prefix="button.prefix"
-              :suffix="button.suffix"
-              :allowHtml="button.allowHtml"
-              @click="onClickButton(button)"
+            :text="button.text"
+            :prefix="button.prefix"
+            :suffix="button.suffix"
+            :allowHtml="button.allowHtml"
+            @click="onClickButton(button)"
             ></ls-button>
-          </li>
         </ul>
       </slot>
     </div>
@@ -175,57 +171,4 @@ export default defineComponent({
 </script>
 
 <style scoped lang="less">
-
-// dialog-root class
-@background-color: #fff;
-@side-space: 12px;
-.ls-dialog {
-  position: relative;
-  margin: 0 auto;
-  top: 50%;
-  transform: translate3d(0, -50%, 0);
-  border-radius: 3px;
-  background-color: @background-color;
-
-  .ls-dialog-header,
-  .ls-dialog-footer {
-    display: flex;
-    padding: 0 12px;
-    justify-content: space-between;
-    line-height: 40px;
-    height: 40px;
-  }
-  .ls-dialog-footer {
-    justify-content: flex-end;
-  }
-  .ls-dialog-actions {
-    display: flex;
-    padding: 0;
-    margin: 0;
-    list-style: none;
-  }
-  .ls-dialog-content-container {
-    padding: 0 20px;
-  }
-
-  &.is-flex {
-    display: flex;
-    flex-direction: column;
-    max-height: calc(100% - (@side-space * 4));
-    max-width: calc(100% - (@side-space * 2));
-
-    .ls-dialog-content {
-      flex: auto;
-      overflow-y: auto;
-    }
-  }
-  &.is-inline {
-    display: inline-block;
-    max-width: 100%;
-    left: 50%;
-    transform: translate3d(-50%, -50%, 0);
-    word-wrap: break-word;
-  }
-}
-
 </style>

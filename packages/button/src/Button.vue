@@ -1,5 +1,5 @@
 <template>
-  <div class="ls-button" tabindex="-1" @click="onClick">
+  <button class="ls-button" :class="classes" @click="onClick">
     <slot name="prefix">
       <i v-if="prefix" :class="prefix"></i>
     </slot>
@@ -9,19 +9,44 @@
     <slot name="suffix">
       <i v-if="suffix" :class="suffix"></i>
     </slot>
-  </div>
+  </button>
 </template>
 
 <script lang="ts">
 
-import { defineComponent } from 'vue';
+import { defineComponent, computed } from 'vue';
+import { Button } from 'types';
 
 export default defineComponent({
   name: "Button",
   props: {
     type: {
       type: String,
-      default: '',
+      default: 'normal',
+      validator(value: string): boolean {
+        return [ 'normal', 'theme', 'success', 'warning', 'danger', 'info' ].includes(value);
+      }
+    },
+    shape: {
+      type: String,
+      default: 'solid',
+      validator(value: string): boolean {
+        return [ 'text', 'solid' ].includes(value);
+      }
+    },
+    border: {
+      type: String,
+      default: 'radius',
+      validator(value: string): boolean {
+        return [ 'square', 'radius', 'capsule' ].includes(value);
+      }
+    },
+    radius: {
+      type: String,
+      default: 'radius',
+      validator(value: string): boolean {
+        return [ 'square', 'radius', 'capsule' ].includes(value);
+      }
     },
     text: {
       type: String,
@@ -39,11 +64,34 @@ export default defineComponent({
       type: Boolean,
       default: false,
     },
+    disabled: {
+      type: Boolean,
+      default: false,
+    },
+    loading: {
+      type: Boolean,
+      default: false,
+    },
   },
-  setup(props, context) {
+  setup(props: Button, context) {
+    const classes = computed(() => {
+      const list: string[] = [];
+
+      list.push('type-' + props.type);
+      list.push('shape-' + props.shape);
+      list.push('radius-' + props.radius);
+
+      if (props.disabled) {
+        list.push('is-disabled');
+      }
+
+      return list;
+    });
+
     const onClick = () => context.emit('click');
 
     return {
+      classes,
       onClick,
     };
   },
@@ -51,5 +99,4 @@ export default defineComponent({
 </script>
 
 <style lang="less">
-
 </style>

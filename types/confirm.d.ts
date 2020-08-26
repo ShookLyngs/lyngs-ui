@@ -1,10 +1,10 @@
 
-import {DialogInstance, DialogOptions, DialogProps} from './dialog';
+import { DialogInstance, DialogOptions, DialogProps} from './dialog';
 import { ComponentPublicInstance } from "vue";
 
 export interface Confirm {
-  open?: (options: DialogOptions) => void;
-  close?: () => void;
+  open?: OpenConfirm;
+  close?: CloseConfirm;
 }
 export type ConfirmInstance = ComponentPublicInstance & Confirm;
 
@@ -16,5 +16,8 @@ export interface IsShowConfirmDialog {
   (dialog: DialogInstance): boolean;
 }
 export interface OpenConfirm {
-  (options: DialogProps): void;
+  (options: DialogProps): number;
+}
+export interface CloseConfirm {
+  (id: number): boolean;
 }
