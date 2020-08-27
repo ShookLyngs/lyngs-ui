@@ -14,3 +14,19 @@
 .ls-fade-enter-to {
   opacity: 1;
 }
+
+// <Transition> Fading transition classes
+.ls-scale-enter-active,
+.ls-scale-leave-active {
+  transition: all .2s ease;
+}
+.ls-scale-enter-from,
+.ls-scale-leave-to {
+  transform: scale3d(.8, .8, 1);
+  opacity: 0;
+}
+.ls-scale-leave-from,
+.ls-scale-enter-to {
+  transform: scale3d(1, 1, 1);
+  opacity: 1;
+}

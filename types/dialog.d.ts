@@ -3,7 +3,7 @@ import {ButtonList} from "./button";
 export interface DialogProps {
   type?: 'flex' | 'inline';
   title?: string;
-  content?: string;
+  content?: string | Element;
   buttons?: ButtonList;
   width?: number | string;
   maxWidth?: number | string;

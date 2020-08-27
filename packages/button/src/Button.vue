@@ -36,9 +36,9 @@ export default defineComponent({
     },
     border: {
       type: String,
-      default: 'radius',
+      default: 'none',
       validator(value: string): boolean {
-        return [ 'square', 'radius', 'capsule' ].includes(value);
+        return [ 'none', 'thin', 'heavy' ].includes(value);
       }
     },
     radius: {

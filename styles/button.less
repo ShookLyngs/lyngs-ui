@@ -3,10 +3,13 @@
 
 // button shapes
 .ls-button-text {
-  padding: 8px 0;
+  padding: 8px 6px;
   margin: 0;
+  border: none;
   line-height: 1;
+  outline: none;
   cursor: pointer;
+  user-select: none;
   text-align: center;
   white-space: nowrap;
   box-sizing: border-box;
@@ -21,8 +24,14 @@
 }
 .ls-button-solid {
   .ls-button-text();
-  padding: 8px 12px;
+  padding: 8px 14px;
   border: none;
+
+  &:not(.is-disabled):not([disabled]) {
+    &:hover {
+      opacity: 1;
+    }
+  }
 }
 
 // button border radius levels
@@ -39,17 +48,37 @@
 // button types
 .ls-button-theme {
   background-color: #theme[normal];
+
+  &:not(.is-disabled):not([disabled]) {
+    &:hover {
+      background-color: #theme[strong];
+    }
+  }
 }
 .ls-button-normal {
   background-color: #normal[normal];
+
+  &:not(.is-disabled):not([disabled]) {
+    &:hover {
+      background-color: #normal[strong];
+    }
+  }
+
+  &.shape-text {
+    background-color: transparent;
+
+    &:not(.is-disabled):not([disabled]) {
+      &:hover {
+        opacity: .7;
+        background-color: transparent;
+      }
+    }
+  }
 }
 
 // open button class
 .ls-button {
-  .ls-button-radius();
   display: inline-block;
-  user-select: none;
-  outline: none;
 
   // types
   &.type-theme {

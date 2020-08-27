@@ -11,6 +11,7 @@
       :max-width="dialog.maxWidth"
       :allow-html="dialog.allowHtml"
       :close-on-click="dialog.closeOnClick"
+      @close="onDialogClose(dialog)"
     ></ls-dialog>
   </ls-modal>
 </template>
@@ -20,7 +21,7 @@
 import Modal from '{packages}/modal';
 import Dialog from '{packages}/dialog';
 import { ref, computed } from 'vue';
-import { DialogInstance, IsShowConfirmDialog, ConfirmTemplate, OpenConfirm, CloseConfirm } from 'types';
+import { DialogInstance, IsShowConfirmDialog, ConfirmTemplate, OpenConfirm, CloseConfirm, OnConfirmDialogClose } from 'types';
 
 export default {
   name: "Confirm",
@@ -69,6 +70,10 @@ export default {
       return false;
     };
 
+    const onDialogClose: OnConfirmDialogClose = (dialog) => {
+      if (dialog.id) close(dialog.id);
+    };
+
     return {
       instances,
       current,
@@ -76,6 +81,7 @@ export default {
       isShowDialog,
       open,
       close,
+      onDialogClose,
     };
   }
 }

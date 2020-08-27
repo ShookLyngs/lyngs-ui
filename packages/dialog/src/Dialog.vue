@@ -8,11 +8,15 @@
     <div class="ls-dialog-header">
       <slot name="header">
         <div class="ls-dialog-title">
-          <span v-if="allowHtml" v-html="title"></span>
-          <span v-else v-text="title"></span>
+          <slot name="title">
+            <span v-if="allowHtml" v-html="title"></span>
+            <span v-else v-text="title"></span>
+          </slot>
         </div>
         <ul class="ls-dialog-actions">
-          <li class="ls-dialog-action">close</li>
+          <slot name="header-actions">
+            <li class="ls-dialog-action">close</li>
+          </slot>
         </ul>
       </slot>
     </div>
@@ -30,12 +34,18 @@
           <ls-button
             v-for="(button, index) in buttons"
             :key="Date.now() + index"
+            :type="button.type"
+            :shape="button.shape"
+            :border="button.border"
+            :radius="button.radius"
             :text="button.text"
             :prefix="button.prefix"
             :suffix="button.suffix"
             :allowHtml="button.allowHtml"
+            :disabled="button.disabled"
+            :loading="button.loading"
             @click="onClickButton(button)"
-            ></ls-button>
+          ></ls-button>
         </ul>
       </slot>
     </div>
@@ -51,8 +61,8 @@ import { Button } from 'types';
 const defaults = () => {
   return {
     buttons: [
-      { text: 'Cancel' },
-      { text: 'Confirm' },
+      { text: 'Cancel', shape: 'text', radius: 'capsule' },
+      { text: 'Confirm', shape: 'solid', type: 'normal', radius: 'capsule' },
     ],
     types: [
       'flex',
@@ -76,7 +86,7 @@ export default defineComponent({
       default: '',
     },
     content: {
-      type: String,
+      type: [ String, Object ],
       default: '',
     },
     buttons: {
@@ -114,7 +124,6 @@ export default defineComponent({
       const maxWidth = props.maxWidth;
       return typeof maxWidth === 'number' ? maxWidth + 'px' : maxWidth;
     });
-
     const dialogStyle = computed((): object => {
       const style: {
         maxWidth?: string;
@@ -133,7 +142,6 @@ export default defineComponent({
 
       return style;
     });
-
     const dialogClasses = computed(() => {
       const classes: string[] = [],
             types             = defaults().types;
@@ -148,14 +156,18 @@ export default defineComponent({
     const open = () => {
       console.log('open');
     };
-
     const close = () => {
       console.log('close');
     };
 
     const onClickButton = (button: Button) => {
       if (button && button.onClick) button.onClick();
+
       context.emit('click', button);
+
+      if (props.closeOnClick) {
+        context.emit('close');
+      }
     };
 
     return {

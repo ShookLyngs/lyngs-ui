@@ -1,18 +1,28 @@
 <template>
-  <transition
-    name="ls-fade"
-    @before-enter="onAfterEnter"
-    @before-leave="onBeforeLeave"
-  >
-    <div
-      class="ls-modal-wrapper"
-      ref="wrapper"
-      v-if="show"
-      @click="onClickWrapper"
+  <div class="ls-modal-wrapper" ref="wrapper">
+    <transition name="ls-scale">
+      <div
+        class="ls-modal-content"
+        :key="Date.now() + Math.floor(Math.random() * 100)"
+        v-if="show"
+      >
+        <slot></slot>
+      </div>
+    </transition>
+    <transition
+      name="ls-fade"
+      @before-enter="onBeforeEnter"
+      @after-enter="onAfterEnter"
+      @before-leave="onBeforeLeave"
+      @after-leave="onAfterLeave"
     >
-      <slot></slot>
-    </div>
-  </transition>
+      <div
+        class="ls-modal"
+        v-if="show"
+        @click="onClickWrapper"
+      ></div>
+    </transition>
+  </div>
 </template>
 
 <script lang="ts">
@@ -49,6 +59,8 @@ export default defineComponent({
   setup(props, context) {
     const wrapper = ref(null);
 
+    const isShowContent = ref(false);
+
     const getWrapperElement = (): HTMLElement | null => wrapper.value ?? null;
 
     const controlParentsClasses: ControlParentsClasses = (action, classes, stopsAt) => {
@@ -78,12 +90,17 @@ export default defineComponent({
 
     const onClickWrapper = (): void => context.emit('click');
 
-    const onAfterEnter = (): void => {
+    const onBeforeEnter = (): void => {
       controlParentsClasses('add', 'ls-modal-parent-hidden', props.pop);
+      context.emit('before-enter');
+    };
+    const onAfterEnter = (): void => {
       context.emit('after-enter');
     };
-
     const onBeforeLeave = (): void => {
+      context.emit('before-leave');
+    };
+    const onAfterLeave = (): void => {
       controlParentsClasses('remove', 'ls-modal-parent-hidden', props.pop);
       context.emit('after-leave');
     };
@@ -98,9 +115,12 @@ export default defineComponent({
 
     return {
       wrapper,
+      isShowContent,
       onClickWrapper,
+      onBeforeEnter,
       onAfterEnter,
       onBeforeLeave,
+      onAfterLeave,
     };
   },
 });

@@ -5,11 +5,13 @@
 @background-color: #light[strongest];
 @side-space: 12px;
 .ls-dialog {
+  display: inline-block;
   position: relative;
   margin: 0 auto;
   top: 50%;
-  transform: translate3d(0, -50%, 0);
   border-radius: 3px;
+  vertical-align: middle;
+  transform: translate3d(0, -50%, 0);
   background-color: @background-color;
 
   .ls-dialog-header,
@@ -21,6 +23,22 @@
   .ls-dialog-header {
     line-height: 40px;
     height: 40px;
+
+    .ls-dialog-title {
+      position: relative;
+
+      /*&:before {
+        content: "";
+        position: absolute;
+        width: 8px;
+        height: 8px;
+        left: 0;
+        top: 50%;
+        background-color: #normal[strong];
+        border-radius: #radius[rounded];
+        transform: translate3d(0, -50%, 0);
+      }*/
+    }
   }
   .ls-dialog-footer {
     padding: 10px;
@@ -41,6 +59,7 @@
     max-width: calc(100% - (@side-space * 2));
 
     .ls-dialog-content {
+      padding: 8px 0;
       flex: auto;
       overflow-y: auto;
     }

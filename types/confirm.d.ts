@@ -21,3 +21,6 @@ export interface OpenConfirm {
 export interface CloseConfirm {
   (id: number): boolean;
 }
+export interface OnConfirmDialogClose {
+  (dialog: DialogInstance): void;
+}
