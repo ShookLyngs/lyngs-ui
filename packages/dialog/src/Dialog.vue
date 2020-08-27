@@ -161,7 +161,7 @@ export default defineComponent({
     };
 
     const onClickButton = (button: Button) => {
-      if (button && button.onClick) button.onClick();
+      if (button && button.onClick) button.onClick()
 
       context.emit('click', button);
 
