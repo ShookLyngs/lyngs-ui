@@ -1,32 +1,47 @@
 <template>
-  <ls-modal :show="isShowModal">
-    <ls-dialog
-      v-for="dialog in instances"
-      :key="dialog.id"
-      :show="isShowDialog(dialog)"
-      :title="dialog.title"
-      :content="dialog.content"
-      :buttons="dialog.buttons"
-      :width="dialog.width"
-      :max-width="dialog.maxWidth"
-      :allow-html="dialog.allowHtml"
-      :close-on-click="dialog.closeOnClick"
-      @close="onDialogClose(dialog)"
-    ></ls-dialog>
-  </ls-modal>
+  <div>
+    <!-- modal-mask -->
+    <ls-modal-mask :show="isShowModal"></ls-modal-mask>
+
+    <!-- dialog-list -->
+    <transition-group name="ls-scale">
+      <template v-for="dialog in instances">
+        <ls-dialog
+          v-if="isShowDialog(dialog)"
+          :show="isShowDialog(dialog)"
+          :key="dialog.id"
+          :title="dialog.title"
+          :content="dialog.content"
+          :buttons="dialog.buttons"
+          :width="dialog.width"
+          :max-width="dialog.maxWidth"
+          :allow-html="dialog.allowHtml"
+          :close-on-click="dialog.closeOnClick"
+          @close="onDialogClose(dialog)"
+        ></ls-dialog>
+      </template>
+    </transition-group>
+  </div>
 </template>
 
 <script lang="ts">
 
-import Modal from '{packages}/modal';
+import ModalMask from '{packages}/modal-mask';
 import Dialog from '{packages}/dialog';
 import { ref, computed } from 'vue';
-import { DialogInstance, IsShowConfirmDialog, ConfirmTemplate, OpenConfirm, CloseConfirm, OnConfirmDialogClose } from 'types';
+import {
+  DialogInstance,
+  IsShowConfirmDialog,
+  ConfirmTemplate,
+  OpenConfirm,
+  CloseConfirm,
+  OnConfirmDialogClose
+} from 'types';
 
 export default {
-  name: "Confirm",
+  name: "LsConfirm",
   components: {
-    LsModal: Modal,
+    LsModalMask: ModalMask,
     LsDialog: Dialog,
   },
   props: {

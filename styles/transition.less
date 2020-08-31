@@ -1,7 +1,7 @@
 
 @import "index";
 
-// <Transition> Fading transition classes
+// <Transition> fade transition
 .ls-fade-enter-active,
 .ls-fade-leave-active {
   transition: opacity .3s ease-in;
@@ -15,10 +15,10 @@
   opacity: 1;
 }
 
-// <Transition> Fading transition classes
+// <Transition> scale
 .ls-scale-enter-active,
 .ls-scale-leave-active {
-  transition: all .2s ease;
+  transition: all .3s ease-in-out;
 }
 .ls-scale-enter-from,
 .ls-scale-leave-to {
@@ -29,4 +29,7 @@
 .ls-scale-enter-to {
   transform: scale3d(1, 1, 1);
   opacity: 1;
+}
+.ls-scale-move {
+  transition: transform .4s;
 }

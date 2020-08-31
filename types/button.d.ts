@@ -10,9 +10,16 @@ export interface Button {
   disabled?: boolean;
   loading?: boolean;
   allowHtml?: boolean;
-  onClick?: () => any;
+  onClick?: (button: Button) => any;
 }
 
 export interface ButtonList {
   [index: number]: Button;
+}
+
+export interface OnClickButton {
+  (
+    button: Button,
+    callback: () => void
+  ): boolean | Promise;
 }

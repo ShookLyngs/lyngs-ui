@@ -1,28 +1,20 @@
 <template>
-  <div class="ls-modal-wrapper" ref="wrapper">
-    <transition name="ls-scale">
-      <div
-        class="ls-modal-content"
-        :key="Date.now() + Math.floor(Math.random() * 100)"
-        v-if="show"
-      >
-        <slot></slot>
-      </div>
-    </transition>
-    <transition
-      name="ls-fade"
-      @before-enter="onBeforeEnter"
-      @after-enter="onAfterEnter"
-      @before-leave="onBeforeLeave"
-      @after-leave="onAfterLeave"
+  <transition
+    name="ls-fade"
+    @before-enter="onBeforeEnter"
+    @after-enter="onAfterEnter"
+    @before-leave="onBeforeLeave"
+    @after-leave="onAfterLeave"
+  >
+    <div
+      class="ls-modal-mask"
+      ref="wrapper"
+      v-if="show"
+      @click="onClickWrapper"
     >
-      <div
-        class="ls-modal"
-        v-if="show"
-        @click="onClickWrapper"
-      ></div>
-    </transition>
-  </div>
+      <slot></slot>
+    </div>
+  </transition>
 </template>
 
 <script lang="ts">
@@ -38,7 +30,7 @@ interface ControlParentsClasses {
 }
 
 export default defineComponent({
-  name: "Modal",
+  name: "LsModalMask",
   props: {
     // indicates the visibility of the component
     show: {
@@ -55,11 +47,14 @@ export default defineComponent({
       type: [ String, Number ],
       default: 'body',
     },
+    // classes that's gonna be planted on.
+    maskClass: {
+      type: String,
+      default: 'ls-modal-mask-parent-hidden',
+    },
   },
   setup(props, context) {
     const wrapper = ref(null);
-
-    const isShowContent = ref(false);
 
     const getWrapperElement = (): HTMLElement | null => wrapper.value ?? null;
 
@@ -91,7 +86,7 @@ export default defineComponent({
     const onClickWrapper = (): void => context.emit('click');
 
     const onBeforeEnter = (): void => {
-      controlParentsClasses('add', 'ls-modal-parent-hidden', props.pop);
+      controlParentsClasses('add', props.maskClass, props.pop);
       context.emit('before-enter');
     };
     const onAfterEnter = (): void => {
@@ -101,7 +96,7 @@ export default defineComponent({
       context.emit('before-leave');
     };
     const onAfterLeave = (): void => {
-      controlParentsClasses('remove', 'ls-modal-parent-hidden', props.pop);
+      controlParentsClasses('remove', props.maskClass, props.pop);
       context.emit('after-leave');
     };
 
@@ -115,7 +110,6 @@ export default defineComponent({
 
     return {
       wrapper,
-      isShowContent,
       onClickWrapper,
       onBeforeEnter,
       onAfterEnter,

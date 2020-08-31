@@ -1,4 +1,4 @@
-import {ButtonList} from "./button";
+import { Button, ButtonList } from "./button";
 
 export interface DialogProps {
   type?: 'flex' | 'inline';
@@ -18,3 +18,10 @@ export interface DialogStatus {
 }
 
 export type DialogInstance = DialogOptions & DialogStatus;
+
+export interface DialogButton extends Button {
+  onClick: (
+    button: Button,
+    callback?: () => void
+  ) => boolean | Promise<boolean>;
+}

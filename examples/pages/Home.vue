@@ -24,10 +24,20 @@ export default defineComponent({
       setTimeout(() => {
         if (confirm && typeof confirm.open === 'function') {
           confirm.open({
-            title: 'Noice',
-            content: list.value ?? '',
+            title: String(Date.now()),
+            content: String(Date.now() * Math.floor(Math.random() * Math.pow(10, 10))),
             width: '400px',
             allowHtml: true,
+            closeOnClick: false,
+            buttons: [
+              { text: 'Cancel', shape: 'text', radius: 'capsule' },
+              { text: 'Confirm', shape: 'solid', type: 'normal', radius: 'capsule',
+                onClick(button) {
+                  button.loading = true;
+                  setTimeout(() => button.loading = false, 1000);
+                },
+              },
+            ],
           });
         }
       }, 1000);

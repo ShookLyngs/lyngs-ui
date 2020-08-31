@@ -1,5 +1,5 @@
 import { App, Plugin } from 'vue';
-import Component from './src/Dialog.vue';
+import Component from './src/component.vue';
 
 const component: Plugin =  {
   ...Component,

@@ -1,5 +1,5 @@
 import { createApp, App, Plugin } from 'vue';
-import Component from './src/Confirm.vue';
+import Component from './src/component.vue';
 import { ConfirmInstance } from 'types';
 
 const getInstance = (element?: string | Element) => {

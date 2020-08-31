@@ -1,7 +1,8 @@
 <template>
   <button class="ls-button" :class="classes" @click="onClick">
     <slot name="prefix">
-      <i v-if="prefix" :class="prefix"></i>
+      <i v-if="loading">loading</i>
+      <i v-else-if="prefix" :class="prefix"></i>
     </slot>
     <slot>
       <span>{{ text }}</span>
@@ -18,7 +19,7 @@ import { defineComponent, computed } from 'vue';
 import { Button } from 'types';
 
 export default defineComponent({
-  name: "Button",
+  name: "LsButton",
   props: {
     type: {
       type: String,
@@ -83,6 +84,9 @@ export default defineComponent({
 
       if (props.disabled) {
         list.push('is-disabled');
+      }
+      if (props.loading) {
+        list.push('is-loading');
       }
 
       return list;

@@ -4,7 +4,7 @@ import Component from './src/component.vue';
 const component: Plugin = {
   ...Component,
   install: (app: App): void => {
-    app.component('LsButton', Component);
+    app.component('LsModalContent', Component);
   },
 };
 export default component;

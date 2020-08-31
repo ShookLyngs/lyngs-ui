@@ -1,60 +1,64 @@
 <template>
-  <div
-    class="ls-dialog"
-    :class="dialogClasses"
-    :style="dialogStyle"
-    v-if="show"
-  >
-    <div class="ls-dialog-header">
-      <slot name="header">
-        <div class="ls-dialog-title">
-          <slot name="title">
-            <span v-if="allowHtml" v-html="title"></span>
-            <span v-else v-text="title"></span>
+  <transition name="ls-scale">
+    <ls-modal-content v-if="show">
+      <div
+        class="ls-dialog"
+        :class="dialogClasses"
+        :style="dialogStyle"
+      >
+        <div class="ls-dialog-header">
+          <slot name="header">
+            <div class="ls-dialog-title">
+              <slot name="title">
+                <span v-if="allowHtml" v-html="title"></span>
+                <span v-else v-text="title"></span>
+              </slot>
+            </div>
+            <ul class="ls-dialog-actions">
+              <slot name="header-actions">
+                <li class="ls-dialog-action">close</li>
+              </slot>
+            </ul>
           </slot>
         </div>
-        <ul class="ls-dialog-actions">
-          <slot name="header-actions">
-            <li class="ls-dialog-action">close</li>
+        <div class="ls-dialog-content">
+          <slot name="content">
+            <div class="ls-dialog-content-container">
+              <span v-if="allowHtml" v-html="content"></span>
+              <span v-else v-text="content"></span>
+            </div>
           </slot>
-        </ul>
-      </slot>
-    </div>
-    <div class="ls-dialog-content">
-      <slot name="content">
-        <div class="ls-dialog-content-container">
-          <span v-if="allowHtml" v-html="content"></span>
-          <span v-else v-text="content"></span>
         </div>
-      </slot>
-    </div>
-    <div class="ls-dialog-footer">
-      <slot name="footer">
-        <ul class="ls-dialog-actions">
-          <ls-button
-            v-for="(button, index) in buttons"
-            :key="Date.now() + index"
-            :type="button.type"
-            :shape="button.shape"
-            :border="button.border"
-            :radius="button.radius"
-            :text="button.text"
-            :prefix="button.prefix"
-            :suffix="button.suffix"
-            :allowHtml="button.allowHtml"
-            :disabled="button.disabled"
-            :loading="button.loading"
-            @click="onClickButton(button)"
-          ></ls-button>
-        </ul>
-      </slot>
-    </div>
-  </div>
+        <div class="ls-dialog-footer">
+          <slot name="footer">
+            <ul class="ls-dialog-actions">
+              <ls-button
+                v-for="(button, index) in buttons"
+                :key="Date.now() + index"
+                :type="button.type"
+                :shape="button.shape"
+                :border="button.border"
+                :radius="button.radius"
+                :text="button.text"
+                :prefix="button.prefix"
+                :suffix="button.suffix"
+                :allowHtml="button.allowHtml"
+                :disabled="button.disabled"
+                :loading="button.loading"
+                @click="onClickButton(button)"
+              ></ls-button>
+            </ul>
+          </slot>
+        </div>
+      </div>
+    </ls-modal-content>
+  </transition>
 </template>
 
 <script lang="ts">
 
-import ButtonComponent from '{packages}/button';
+import LsButton from '{packages}/button';
+import ModalContent from '{packages}/modal-content';
 import { defineComponent, computed } from 'vue';
 import { Button } from 'types';
 
@@ -72,9 +76,10 @@ const defaults = () => {
 };
 
 export default defineComponent({
-  name: "Dialog",
+  name: "LsDialog",
   components: {
-    LsButton: ButtonComponent,
+    LsButton: LsButton,
+    LsModalContent: ModalContent,
   },
   props: {
     show: {
@@ -153,21 +158,17 @@ export default defineComponent({
       return classes;
     });
 
-    const open = () => {
-      console.log('open');
-    };
     const close = () => {
       console.log('close');
     };
 
     const onClickButton = (button: Button) => {
-      if (button && button.onClick) button.onClick();
-
       context.emit('click', button);
-
-      if (props.closeOnClick) {
-        context.emit('close');
+      if (button && typeof button.onClick === 'function') {
+        button.onClick(button);
       }
+
+      if (props.closeOnClick) context.emit('close', button);
     };
 
     return {
