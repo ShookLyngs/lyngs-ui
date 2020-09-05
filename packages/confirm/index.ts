@@ -1,18 +1,29 @@
-import { createApp, App, Plugin } from 'vue';
+import { createApp } from 'vue';
 import Component from './src/component.vue';
-import { ConfirmInstance } from 'types';
+import { ConfirmInstance, CreateConfirmInstance, GetConfirmInstance } from 'types';
 
-const getInstance = (element?: string | Element) => {
-  return createApp(Component).mount(element ?? document.body);
-};
+// only one component-instance in an App instance
+let globalInstance: ConfirmInstance;
 
-const component: Plugin = {
-  ...Component,
-  install: (app: App): void => {
+// create an instance of confirm dialog
+const createInstance: CreateConfirmInstance = (element) =>
+  createApp(Component).mount(element ?? document.body);
+
+// return and always return same instance of the component
+const getInstance: GetConfirmInstance = () => {
+  if (!globalInstance) {
     const element = document.createElement('div');
     document.body.appendChild(element);
+    globalInstance = createInstance(element);
+  }
 
-    app.provide<ConfirmInstance>('$confirm', getInstance(element));
-  },
+  if (!globalInstance.open) throw new Error("Missing property 'open' of component");
+  if (!globalInstance.close) throw new Error("Missing property 'close' of component");
+
+  const open = globalInstance.open;
+  open.open = open;
+  open.close = globalInstance.close;
+
+  return open;
 };
-export default component;
+export default getInstance();

@@ -60,7 +60,7 @@
 import LsButton from '{packages}/button';
 import ModalContent from '{packages}/modal-content';
 import { defineComponent, computed } from 'vue';
-import { Button } from 'types';
+import { DialogButton } from 'types';
 
 const defaults = () => {
   return {
@@ -158,17 +158,27 @@ export default defineComponent({
       return classes;
     });
 
-    const close = () => {
-      console.log('close');
+    const close = (button?: DialogButton) => {
+      context.emit('close', button);
     };
 
-    const onClickButton = (button: Button) => {
+    const onClickButton = (button: DialogButton) => {
       context.emit('click', button);
-      if (button && typeof button.onClick === 'function') {
-        button.onClick(button);
+
+      if (typeof button.onClick === 'function') {
+        const result = button.onClick({ close }, button);
+
+        if (Object.prototype.toString.call(result) === '[object Promise]' && result !== false && result !== true) {
+          return result.then(result => result && close(button)).catch();
+        }
+        if (result) {
+          return close(button);
+        }
       }
 
-      if (props.closeOnClick) context.emit('close', button);
+      if (props.closeOnClick) {
+        close(button);
+      }
     };
 
     return {

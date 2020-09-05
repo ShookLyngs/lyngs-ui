@@ -1,7 +1,7 @@
 {
   "name": "lyngs-ui-components",
   "version": "0.1.0",
-  "description": "A Vue.js 3.0 UI Toolkit, present by Shook Lyngs.",
+  "description": "A Vue.js 3.0 UI Toolkit, present by ShookLyngs.",
   "author": "https://github.com/ShookLyngs",
   "license": "MIT",
   "scripts": {

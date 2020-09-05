@@ -9,7 +9,7 @@ import '../styles/index.less';
 
 // import(confirm-component): provide to global
 import Confirm from '{packages}/confirm';
-app.use(Confirm);
+app.config.globalProperties.$confirm = Confirm;
 
 // mount App to element#app inside of body
 app.mount('#app');

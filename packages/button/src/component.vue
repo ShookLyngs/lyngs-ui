@@ -82,12 +82,8 @@ export default defineComponent({
       list.push('shape-' + props.shape);
       list.push('radius-' + props.radius);
 
-      if (props.disabled) {
-        list.push('is-disabled');
-      }
-      if (props.loading) {
-        list.push('is-loading');
-      }
+      if (props.disabled) list.push('is-disabled');
+      if (props.loading) list.push('is-loading');
 
       return list;
     });
