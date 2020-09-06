@@ -1,7 +1,7 @@
 import { Button } from "./button";
 
 export interface DialogProps {
-  type?: 'flex' | 'inline';
+  display?: 'flex' | 'inline';
   title?: string;
   content?: string | Element;
   buttons?: DialogButton[];

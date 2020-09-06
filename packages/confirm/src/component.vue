@@ -8,15 +8,9 @@
       <template v-for="dialog in instances">
         <ls-dialog
           v-if="isShowDialog(dialog)"
-          :show="isShowDialog(dialog)"
+          :="dialog"
           :key="dialog.id"
-          :title="dialog.title"
-          :content="dialog.content"
-          :buttons="dialog.buttons"
-          :width="dialog.width"
-          :max-width="dialog.maxWidth"
-          :allow-html="dialog.allowHtml"
-          :close-on-click="dialog.closeOnClick"
+          :show="isShowDialog(dialog)"
           @close="onDialogClose(dialog)"
         ></ls-dialog>
       </template>

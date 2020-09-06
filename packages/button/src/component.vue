@@ -20,6 +20,7 @@ import { Button } from 'types';
 
 export default defineComponent({
   name: "LsButton",
+  inheritAttrs: false,
   props: {
     type: {
       type: String,

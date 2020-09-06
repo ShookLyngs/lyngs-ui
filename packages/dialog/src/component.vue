@@ -34,7 +34,7 @@
             <ul class="ls-dialog-actions">
               <ls-button
                 v-for="(button, index) in buttons"
-                :key="Date.now() + index"
+                :key="index"
                 :type="button.type"
                 :shape="button.shape"
                 :border="button.border"
@@ -68,7 +68,7 @@ const defaults = () => {
       { text: 'Cancel', shape: 'text', radius: 'capsule' },
       { text: 'Confirm', shape: 'solid', type: 'normal', radius: 'capsule' },
     ],
-    types: [
+    displays: [
       'flex',
       'inline',
     ],
@@ -98,7 +98,7 @@ export default defineComponent({
       type: Array,
       default: () => defaults().buttons,
     },
-    type: {
+    display: {
       type: String,
       default: 'flex'
     },
@@ -149,10 +149,10 @@ export default defineComponent({
     });
     const dialogClasses = computed(() => {
       const classes: string[] = [],
-            types             = defaults().types;
+            displays          = defaults().displays;
 
-      if (props.type && types.includes(props.type)) {
-        classes.push(`is-${props.type}`);
+      if (props.display && displays.includes(props.display)) {
+        classes.push(`is-${props.display}`);
       }
 
       return classes;
@@ -163,6 +163,7 @@ export default defineComponent({
     };
 
     const onClickButton = (button: DialogButton) => {
+      console.log('t');
       context.emit('click', button);
 
       if (typeof button.onClick === 'function') {
