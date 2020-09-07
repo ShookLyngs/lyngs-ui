@@ -100,7 +100,7 @@ export default defineComponent({
     },
     display: {
       type: String,
-      default: 'flex'
+      default: 'flex',
     },
     width: {
       type: [ Number, String ],
@@ -117,6 +117,12 @@ export default defineComponent({
     closeOnClick: {
       type: Boolean,
       default: true,
+    },
+    onConfirm: {
+      type: Function,
+    },
+    onCancel: {
+      type: Function,
     },
   },
   setup(props, context) {
@@ -163,18 +169,26 @@ export default defineComponent({
     };
 
     const onClickButton = (button: DialogButton) => {
-      console.log('t');
       context.emit('click', button);
 
-      if (typeof button.onClick === 'function') {
-        const result = button.onClick({ close }, button);
+      const callbackContext                    = { close };
+      let   result: boolean | Promise<boolean> = false;
 
-        if (Object.prototype.toString.call(result) === '[object Promise]' && result !== false && result !== true) {
-          return result.then(result => result && close(button)).catch();
-        }
-        if (result) {
-          return close(button);
-        }
+      if (button.trigger === 'confirm' && typeof props.onConfirm === 'function') {
+        result = props.onConfirm(callbackContext, button);
+      }
+      else if (button.trigger === 'cancel' && typeof props.onCancel === 'function') {
+        result = props.onCancel(callbackContext, button);
+      }
+      else if ((!button.trigger || button.trigger === 'click') && typeof button.onClick === 'function') {
+        result = button.onClick(callbackContext, button);
+      }
+
+      if (Object.prototype.toString.call(result) === '[object Promise]' && result !== false && result !== true) {
+        return result.then(bool => bool && close(button)).catch();
+      }
+      if (result) {
+        return close(button);
       }
 
       if (props.closeOnClick) {

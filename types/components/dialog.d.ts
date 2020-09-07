@@ -9,6 +9,8 @@ export interface DialogProps {
   maxWidth?: number | string;
   allowHtml?: boolean;
   closeOnClick?: boolean;
+  onConfirm?: DialogCallback;
+  onCancel?: DialogCallback;
 }
 export interface DialogStatus {
   id: number;
@@ -21,8 +23,15 @@ export interface DialogContext {
   close: (button?: DialogButton) => void;
 }
 export interface DialogButton extends Button {
+  trigger?: 'click' | 'confirm' | 'cancel',
   onClick?: (
     context: DialogContext,
     button: DialogButton
   ) => boolean | Promise<boolean>;
+}
+export interface DialogCallback {
+  (
+    context: DialogContext,
+    button?: DialogButton
+  ): boolean | Promise<boolean>;
 }

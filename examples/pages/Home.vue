@@ -30,15 +30,19 @@ export default defineComponent({
           allowHtml: true,
           closeOnClick: false,
           buttons: [
-            { text: 'Cancel', shape: 'text', radius: 'capsule' },
-            { text: 'Confirm', shape: 'solid', type: 'normal', radius: 'capsule',
-              async onClick(context, button) {
-                button.loading = true;
-                await async.timeout(1000);
-                return true;
-              },
-            },
+            { text: 'Cancel', shape: 'text', radius: 'capsule', trigger: 'cancel' },
+            { text: 'Confirm', shape: 'solid', type: 'normal', radius: 'capsule', trigger: 'confirm' },
           ],
+          async onConfirm(context, button) {
+            console.log('confirm');
+            if (button) button.loading = true;
+            await async.timeout(1000);
+            return true;
+          },
+          onCancel(context, button) {
+            console.log('cancel');
+            return true;
+          }
         });
       }, 1000);
     };
