@@ -1,6 +1,6 @@
 <template>
   <transition name="ls-scale">
-    <ls-modal-content v-if="show">
+    <ls-modal-content v-if="show" @click="onClickModalContent">
       <div
         class="ls-dialog"
         :class="dialogClasses"
@@ -118,10 +118,25 @@ export default defineComponent({
       type: Boolean,
       default: true,
     },
+    closeOnClickModal: {
+      type: Boolean,
+      default: true,
+    },
+    eventType: {
+      type: String,
+      default: 'method',
+      validator: (value: string) => [ 'method', 'promise' ].includes(value),
+    },
     onConfirm: {
       type: Function,
     },
     onCancel: {
+      type: Function,
+    },
+    onPromiseResolve: {
+      type: Function,
+    },
+    onPromiseReject: {
       type: Function,
     },
   },
@@ -135,7 +150,7 @@ export default defineComponent({
       const maxWidth = props.maxWidth;
       return typeof maxWidth === 'number' ? maxWidth + 'px' : maxWidth;
     });
-    const dialogStyle = computed((): object => {
+    const dialogStyle = computed(() => {
       const style: {
         maxWidth?: string;
         width?: string;
@@ -171,17 +186,21 @@ export default defineComponent({
     const onClickButton = (button: DialogButton) => {
       context.emit('click', button);
 
-      const callbackContext                    = { close };
+      const callbackContext = { close, button };
       let   result: boolean | Promise<boolean> = false;
 
-      if (button.trigger === 'confirm' && typeof props.onConfirm === 'function') {
-        result = props.onConfirm(callbackContext, button);
+      if (button.trigger === 'confirm' && props.onPromiseResolve) {
+        props.onPromiseResolve(callbackContext);
+      } else if ((!button.trigger || button.trigger === 'cancel') && props.onPromiseReject) {
+        props.onPromiseReject(callbackContext);
       }
-      else if (button.trigger === 'cancel' && typeof props.onCancel === 'function') {
-        result = props.onCancel(callbackContext, button);
-      }
-      else if ((!button.trigger || button.trigger === 'click') && typeof button.onClick === 'function') {
-        result = button.onClick(callbackContext, button);
+
+      if (button.trigger === 'confirm' && props.onConfirm) {
+        result = props.onConfirm(callbackContext);
+      } else if (button.trigger === 'cancel' && props.onCancel) {
+        result = props.onCancel(callbackContext);
+      } else if ((!button.trigger || button.trigger === 'click') && button.onClick) {
+        result = button.onClick(callbackContext);
       }
 
       if (Object.prototype.toString.call(result) === '[object Promise]' && result !== false && result !== true) {
@@ -196,6 +215,12 @@ export default defineComponent({
       }
     };
 
+    const onClickModalContent = () => {
+      if (props.closeOnClickModal) {
+        close();
+      }
+    };
+
     return {
       dialogMaxWidth,
       dialogStyle,
@@ -203,6 +228,7 @@ export default defineComponent({
       open,
       close,
       onClickButton,
+      onClickModalContent
     };
   }
 });

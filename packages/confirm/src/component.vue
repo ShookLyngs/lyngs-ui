@@ -25,6 +25,7 @@ import Dialog from '{packages}/dialog';
 import { ref, computed } from 'vue';
 import {
   DialogInstance,
+  DialogContext,
   IsShowConfirmDialog,
   ConfirmTemplate,
   OpenConfirm,
@@ -62,10 +63,14 @@ export default {
     };
 
     const open: OpenConfirm = (options) => {
-      const merged = { ...template(), ...options };
-      instances.value.push(merged);
+      return new Promise<DialogContext>((resolve, reject) => {
+        const dialog = { ...template(), ...options, ...{
+          onPromiseResolve: resolve,
+          onPromiseReject: reject,
+        }};
 
-      return merged.id;
+        instances.value.push(dialog);
+      });
     };
 
     const close: CloseConfirm = (id) => {
