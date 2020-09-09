@@ -5,6 +5,7 @@
         class="ls-dialog"
         :class="dialogClasses"
         :style="dialogStyle"
+        @click.stop=""
       >
         <div class="ls-dialog-header">
           <slot name="header">
@@ -59,14 +60,14 @@
 
 import LsButton from '{packages}/button';
 import ModalContent from '{packages}/modal-content';
-import { defineComponent, computed } from 'vue';
-import { DialogButton } from 'types';
+import { defineComponent, computed, PropType } from 'vue';
+import { DialogProps, DialogButton, DialogClose, DialogContext } from 'types';
 
-const defaults = () => {
+const defaults = (): { buttons: Array<DialogButton>; displays: ('flex' | 'inline' | undefined)[]; } => {
   return {
     buttons: [
-      { text: 'Cancel', shape: 'text', radius: 'capsule' },
-      { text: 'Confirm', shape: 'solid', type: 'normal', radius: 'capsule' },
+      { text: 'Cancel', shape: 'text', radius: 'capsule', trigger: 'cancel' },
+      { text: 'Confirm', shape: 'solid', type: 'normal', radius: 'capsule', trigger: 'confirm' },
     ],
     displays: [
       'flex',
@@ -95,11 +96,11 @@ export default defineComponent({
       default: '',
     },
     buttons: {
-      type: Array,
+      type: Array as PropType<DialogButton[]>,
       default: () => defaults().buttons,
     },
     display: {
-      type: String,
+      type: String as PropType<DialogProps['display']>,
       default: 'flex',
     },
     width: {
@@ -122,32 +123,27 @@ export default defineComponent({
       type: Boolean,
       default: true,
     },
-    eventType: {
-      type: String,
-      default: 'method',
-      validator: (value: string) => [ 'method', 'promise' ].includes(value),
-    },
     onConfirm: {
-      type: Function,
+      type: Function as PropType<DialogProps['onConfirm']>,
     },
     onCancel: {
-      type: Function,
+      type: Function as PropType<DialogProps['onCancel']>,
     },
     onPromiseResolve: {
-      type: Function,
+      type: Function as PropType<DialogProps['onPromiseResolve']>,
     },
     onPromiseReject: {
-      type: Function,
+      type: Function as PropType<DialogProps['onPromiseReject']>,
     },
   },
-  setup(props, context) {
+  setup(props: DialogProps, context) {
 
     const dialogWidth = computed((): string => {
-      const width = props.width;
+      const width = props.width !== void 0 ? props.width : '';
       return typeof width === 'number' ? width + 'px' : width;
     });
     const dialogMaxWidth = computed((): string => {
-      const maxWidth = props.maxWidth;
+      const maxWidth = props.maxWidth !== void 0 ? props.maxWidth : '';
       return typeof maxWidth === 'number' ? maxWidth + 'px' : maxWidth;
     });
     const dialogStyle = computed(() => {
@@ -179,19 +175,23 @@ export default defineComponent({
       return classes;
     });
 
-    const close = (button?: DialogButton) => {
+    const close: DialogClose = (button) => {
       context.emit('close', button);
     };
 
     const onClickButton = (button: DialogButton) => {
       context.emit('click', button);
 
-      const callbackContext = { close, button };
-      let   result: boolean | Promise<boolean> = false;
+      const callbackContext: DialogContext = {
+        source: 'button',
+        close: close,
+        button: button,
+      };
+      let result: boolean | Promise<boolean> = false;
 
-      if (button.trigger === 'confirm' && props.onPromiseResolve) {
+      if ((!button.trigger || button.trigger === 'confirm') && props.onPromiseResolve) {
         props.onPromiseResolve(callbackContext);
-      } else if ((!button.trigger || button.trigger === 'cancel') && props.onPromiseReject) {
+      } else if (button.trigger === 'cancel' && props.onPromiseReject) {
         props.onPromiseReject(callbackContext);
       }
 
@@ -216,9 +216,14 @@ export default defineComponent({
     };
 
     const onClickModalContent = () => {
-      if (props.closeOnClickModal) {
-        close();
-      }
+      const callbackContext: DialogContext = {
+        close: close,
+        source: 'modal'
+      };
+
+      context.emit('click-modal', callbackContext);
+      if (props.onPromiseReject) props.onPromiseReject(callbackContext);
+      if (props.closeOnClickModal) close();
     };
 
     return {

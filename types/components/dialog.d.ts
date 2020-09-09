@@ -1,6 +1,7 @@
 import { Button } from "./button";
 
 export interface DialogProps {
+  show?: boolean;
   title?: string;
   content?: string | Element;
   buttons?: DialogButton[];
@@ -17,13 +18,13 @@ export interface DialogProps {
 }
 export interface DialogStatus {
   id: number;
-  show?: boolean;
   showModal?: boolean;
 }
 export type DialogInstance = DialogOptions & DialogStatus;
 
 export interface DialogContext {
-  close: (button?: DialogButton) => void;
+  source: 'button' | 'modal';
+  close: DialogClose;
   button?: DialogButton;
 }
 export interface DialogButton extends Button {
@@ -36,4 +37,8 @@ export interface DialogCallback {
   (
     context: DialogContext
   ): boolean | Promise<boolean>;
+}
+
+export interface DialogClose {
+  (button?: DialogButton): void;
 }

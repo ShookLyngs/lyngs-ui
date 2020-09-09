@@ -1,5 +1,5 @@
 
-import { DialogInstance, DialogOptions, DialogProps, DialogContext } from './dialog';
+import { DialogInstance, DialogProps, DialogContext } from './dialog';
 import { ComponentPublicInstance } from "vue";
 
 export interface Confirm {

@@ -29,10 +29,14 @@ export default defineComponent({
           width: '400px',
           allowHtml: true,
           closeOnClick: false,
-          buttons: [
+          /*buttons: [
             { text: 'Cancel', shape: 'text', radius: 'capsule', trigger: 'cancel' },
             { text: 'Confirm', shape: 'solid', type: 'normal', radius: 'capsule' },
-          ],
+          ],*/
+        }).then((context) => {
+          context.close();
+        }).catch((context) => {
+          context.close();
         });
       }, 1000);
     };

@@ -39,9 +39,6 @@ export default {
     LsModalMask: ModalMask,
     LsDialog: Dialog,
   },
-  props: {
-
-  },
   setup() {
     const instances = ref<DialogInstance[]>([]);
 
