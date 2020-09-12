@@ -34,7 +34,7 @@
           <slot name="footer">
             <ul class="ls-dialog-actions">
               <ls-button
-                v-for="(button, index) in buttons"
+                v-for="(button, index) in dialogButtons"
                 :key="index"
                 :type="button.type"
                 :shape="button.shape"
@@ -60,14 +60,14 @@
 
 import LsButton from '{packages}/button';
 import ModalContent from '{packages}/modal-content';
-import { defineComponent, computed, PropType } from 'vue';
-import { DialogProps, DialogButton, DialogClose, DialogContext } from 'types';
+import { defineComponent, computed, ref, watch, onMounted, Ref, PropType } from 'vue';
+import { DialogProps, DialogButton, DialogClose, DialogContext, UpdateDialogButtons } from 'types';
 
 const defaults = (): { buttons: Array<DialogButton>; displays: ('flex' | 'inline' | undefined)[]; } => {
   return {
     buttons: [
       { text: 'Cancel', shape: 'text', radius: 'capsule', trigger: 'cancel' },
-      { text: 'Confirm', shape: 'solid', type: 'normal', radius: 'capsule', trigger: 'confirm' },
+      { text: 'Confirm', shape: 'solid', type: 'normal', radius: 'capsule', trigger: 'confirm', loading: false },
     ],
     displays: [
       'flex',
@@ -137,7 +137,7 @@ export default defineComponent({
     },
   },
   setup(props: DialogProps, context) {
-
+    // computed
     const dialogWidth = computed((): string => {
       const width = props.width !== void 0 ? props.width : '';
       return typeof width === 'number' ? width + 'px' : width;
@@ -175,16 +175,18 @@ export default defineComponent({
       return classes;
     });
 
-    const close: DialogClose = (button) => {
-      context.emit('close', button);
-    };
+    // active methods
+    const updateButtons: UpdateDialogButtons = (buttons) =>
+      dialogButtons.value = buttons ?? defaults().buttons;
+    const close: DialogClose = (button) => context.emit('close', button);
 
+    // passive methods
     const onClickButton = (button: DialogButton) => {
       context.emit('click', button);
 
       const callbackContext: DialogContext = {
         source: 'button',
-        close: close,
+        close: close.bind(context, button),
         button: button,
       };
       let result: boolean | Promise<boolean> = false;
@@ -203,8 +205,8 @@ export default defineComponent({
         result = button.onClick(callbackContext);
       }
 
-      if (Object.prototype.toString.call(result) === '[object Promise]' && result !== false && result !== true) {
-        return result.then(bool => bool && close(button)).catch();
+      if (Object.prototype.toString.call(result) === '[object Promise]' && typeof result !== 'boolean') {
+        return result.then(bool => bool && close(button)).catch(() => void 0);
       }
       if (result) {
         return close(button);
@@ -214,7 +216,6 @@ export default defineComponent({
         close(button);
       }
     };
-
     const onClickModalContent = () => {
       const callbackContext: DialogContext = {
         close: close,
@@ -226,12 +227,21 @@ export default defineComponent({
       if (props.closeOnClickModal) close();
     };
 
+    // watchers
+    let dialogButtons: Ref<DialogButton[]> = ref([]);
+    watch(() => props.buttons, updateButtons);
+    onMounted(() => updateButtons(props.buttons));
+
     return {
+      // data
+      dialogButtons,
+      // computed
       dialogMaxWidth,
       dialogStyle,
       dialogClasses,
-      open,
+      // active methods
       close,
+      // passive methods
       onClickButton,
       onClickModalContent
     };

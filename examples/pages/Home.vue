@@ -33,7 +33,10 @@ export default defineComponent({
             { text: 'Cancel', shape: 'text', radius: 'capsule', trigger: 'cancel' },
             { text: 'Confirm', shape: 'solid', type: 'normal', radius: 'capsule' },
           ],*/
-        }).then((context) => {
+        }).then(async (context) => {
+          console.log(context);
+          if (context.button) context.button.loading = true;
+          await async.timeout(1000);
           context.close();
         }).catch((context) => {
           context.close();

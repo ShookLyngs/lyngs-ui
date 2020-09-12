@@ -42,3 +42,6 @@ export interface DialogCallback {
 export interface DialogClose {
   (button?: DialogButton): void;
 }
+export interface UpdateDialogButtons {
+  (buttons?: DialogButton[]): void;
+}
