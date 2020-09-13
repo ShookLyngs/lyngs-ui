@@ -1,6 +1,7 @@
 import { Button } from "./button";
+import { UnwrapRefSimple } from 'vue';
 
-export interface DialogProps {
+export interface Dialog {
   show?: boolean;
   title?: string;
   content?: string | Element;
@@ -44,4 +45,13 @@ export interface DialogClose {
 }
 export interface UpdateDialogButtons {
   (buttons?: DialogButton[]): void;
+}
+export interface DialogDefaultProps {
+  (): {
+    buttons: DialogButton[];
+    displays: (Dialog['display'])[];
+  };
+}
+export interface OnClickDialogButton {
+  (button: UnwrapRefSimple<DialogButton> | DialogButton): any;
 }

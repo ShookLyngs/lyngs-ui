@@ -19,15 +19,8 @@
 
 <script lang="ts">
 
-import { defineComponent, ref, onMounted } from 'vue';
-
-interface ControlParentsClasses {
-  (
-    action: string,
-    classes: string | string[],
-    stopsAt?: number | string,
-  ): void;
-}
+import { defineComponent, ref, onMounted, PropType } from 'vue';
+import { ModalMask, ModalGetWrapperElement, ModalControlParentsClasses } from 'types';
 
 export default defineComponent({
   name: "LsModalMask",
@@ -44,21 +37,22 @@ export default defineComponent({
     // possible Number values:
     // - n: find parents and stops at the nth, only accept positive number.
     pop: {
-      type: [ String, Number ],
+      type: [ String, Number ] as PropType<ModalMask['pop']>,
+      validator: (value: ModalMask['pop']) => typeof value === 'string' || value > 0,
       default: 'body',
     },
     // classes that's gonna be planted on.
-    maskClass: {
+    plantClass: {
       type: String,
       default: 'ls-modal-mask-parent-hidden',
     },
   },
-  setup(props, context) {
+  setup(props: ModalMask, context) {
     const wrapper = ref(null);
 
-    const getWrapperElement = (): HTMLElement | null => wrapper.value ?? null;
+    const getWrapperElement: ModalGetWrapperElement = () => wrapper.value ?? null;
 
-    const controlParentsClasses: ControlParentsClasses = (action, classes, stopsAt) => {
+    const controlParentsClasses: ModalControlParentsClasses = (action, classes, stopsAt) => {
       const merged = Array.isArray(classes) ? classes : [ classes ],
             wrap   = getWrapperElement(),
             body   = document.body;
@@ -83,33 +77,32 @@ export default defineComponent({
       }
     };
 
-    const onClickWrapper = (): void => context.emit('click');
+    const onClickWrapper = () => context.emit('click');
 
-    const onBeforeEnter = (): void => {
-      controlParentsClasses('add', props.maskClass, props.pop);
+    const onBeforeEnter = () => {
+      controlParentsClasses('add', props.plantClass, props.pop);
       context.emit('before-enter');
     };
-    const onAfterEnter = (): void => {
+    const onAfterEnter = () => {
       context.emit('after-enter');
     };
-    const onBeforeLeave = (): void => {
+    const onBeforeLeave = () => {
       context.emit('before-leave');
     };
-    const onAfterLeave = (): void => {
-      controlParentsClasses('remove', props.maskClass, props.pop);
+    const onAfterLeave = () => {
+      controlParentsClasses('remove', props.plantClass, props.pop);
       context.emit('after-leave');
     };
 
     onMounted(() => {
-      if (props.show) {
-        onAfterEnter();
-      } else {
-        onBeforeLeave();
-      }
+      if (props.show) onAfterEnter();
+      else onBeforeLeave();
     });
 
     return {
+      // refs
       wrapper,
+      // passives
       onClickWrapper,
       onBeforeEnter,
       onAfterEnter,

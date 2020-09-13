@@ -60,14 +60,14 @@
 
 import LsButton from '{packages}/button';
 import ModalContent from '{packages}/modal-content';
-import { defineComponent, computed, ref, watch, onMounted, Ref, PropType } from 'vue';
-import { DialogProps, DialogButton, DialogClose, DialogContext, UpdateDialogButtons } from 'types';
+import { defineComponent, computed, ref, watch, onMounted, PropType } from 'vue';
+import { Dialog, DialogButton, DialogClose, DialogContext, UpdateDialogButtons, DialogDefaultProps, OnClickDialogButton } from 'types';
 
-const defaults = (): { buttons: Array<DialogButton>; displays: ('flex' | 'inline' | undefined)[]; } => {
+const defaults: DialogDefaultProps = () => {
   return {
     buttons: [
       { text: 'Cancel', shape: 'text', radius: 'capsule', trigger: 'cancel' },
-      { text: 'Confirm', shape: 'solid', type: 'normal', radius: 'capsule', trigger: 'confirm', loading: false },
+      { text: 'Confirm', shape: 'solid', type: 'normal', radius: 'capsule', trigger: 'confirm' },
     ],
     displays: [
       'flex',
@@ -100,7 +100,7 @@ export default defineComponent({
       default: () => defaults().buttons,
     },
     display: {
-      type: String as PropType<DialogProps['display']>,
+      type: String as PropType<Dialog['display']>,
       default: 'flex',
     },
     width: {
@@ -124,19 +124,19 @@ export default defineComponent({
       default: true,
     },
     onConfirm: {
-      type: Function as PropType<DialogProps['onConfirm']>,
+      type: Function as PropType<Dialog['onConfirm']>,
     },
     onCancel: {
-      type: Function as PropType<DialogProps['onCancel']>,
+      type: Function as PropType<Dialog['onCancel']>,
     },
     onPromiseResolve: {
-      type: Function as PropType<DialogProps['onPromiseResolve']>,
+      type: Function as PropType<Dialog['onPromiseResolve']>,
     },
     onPromiseReject: {
-      type: Function as PropType<DialogProps['onPromiseReject']>,
+      type: Function as PropType<Dialog['onPromiseReject']>,
     },
   },
-  setup(props: DialogProps, context) {
+  setup(props: Dialog, context) {
     // computed
     const dialogWidth = computed((): string => {
       const width = props.width !== void 0 ? props.width : '';
@@ -181,7 +181,7 @@ export default defineComponent({
     const close: DialogClose = (button) => context.emit('close', button);
 
     // passive methods
-    const onClickButton = (button: DialogButton) => {
+    const onClickButton: OnClickDialogButton = (button) => {
       context.emit('click', button);
 
       const callbackContext: DialogContext = {
@@ -228,7 +228,7 @@ export default defineComponent({
     };
 
     // watchers
-    let dialogButtons: Ref<DialogButton[]> = ref([]);
+    let dialogButtons = ref<DialogButton[]>([]);
     watch(() => props.buttons, updateButtons);
     onMounted(() => updateButtons(props.buttons));
 
