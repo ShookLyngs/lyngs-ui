@@ -1,7 +1,7 @@
 import { Button } from "./button";
 import { UnwrapRefSimple } from 'vue';
 
-export interface Dialog {
+export interface DialogProps {
   show?: boolean;
   title?: string;
   content?: string | Element;
@@ -49,7 +49,7 @@ export interface UpdateDialogButtons {
 export interface DialogDefaultProps {
   (): {
     buttons: DialogButton[];
-    displays: (Dialog['display'])[];
+    displays: (DialogProps['display'])[];
   };
 }
 export interface OnClickDialogButton {

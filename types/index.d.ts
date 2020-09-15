@@ -9,3 +9,4 @@ export * from './components/modal';
 export * from './components/confirm';
 export * from './components/button';
 export * from './components/dialog';
+export * from './components/icon';

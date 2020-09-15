@@ -17,7 +17,7 @@
             </div>
             <ul class="ls-dialog-actions">
               <slot name="header-actions">
-                <li class="ls-dialog-action">close</li>
+                <li class="ls-dialog-action"><ls-icon name="ls-icon-no"></ls-icon></li>
               </slot>
             </ul>
           </slot>
@@ -60,8 +60,9 @@
 
 import LsButton from '{packages}/button';
 import ModalContent from '{packages}/modal-content';
+import Icon from '{packages}/icon';
 import { defineComponent, computed, ref, watch, onMounted, PropType } from 'vue';
-import { Dialog, DialogButton, DialogClose, DialogContext, UpdateDialogButtons, DialogDefaultProps, OnClickDialogButton } from 'types';
+import { DialogProps, DialogButton, DialogClose, DialogContext, UpdateDialogButtons, DialogDefaultProps, OnClickDialogButton } from 'types';
 
 const defaults: DialogDefaultProps = () => {
   return {
@@ -81,6 +82,7 @@ export default defineComponent({
   components: {
     LsButton: LsButton,
     LsModalContent: ModalContent,
+    lsIcon: Icon,
   },
   props: {
     show: {
@@ -100,7 +102,7 @@ export default defineComponent({
       default: () => defaults().buttons,
     },
     display: {
-      type: String as PropType<Dialog['display']>,
+      type: String as PropType<DialogProps['display']>,
       default: 'flex',
     },
     width: {
@@ -124,19 +126,19 @@ export default defineComponent({
       default: true,
     },
     onConfirm: {
-      type: Function as PropType<Dialog['onConfirm']>,
+      type: Function as PropType<DialogProps['onConfirm']>,
     },
     onCancel: {
-      type: Function as PropType<Dialog['onCancel']>,
+      type: Function as PropType<DialogProps['onCancel']>,
     },
     onPromiseResolve: {
-      type: Function as PropType<Dialog['onPromiseResolve']>,
+      type: Function as PropType<DialogProps['onPromiseResolve']>,
     },
     onPromiseReject: {
-      type: Function as PropType<Dialog['onPromiseReject']>,
+      type: Function as PropType<DialogProps['onPromiseReject']>,
     },
   },
-  setup(props: Dialog, context) {
+  setup(props: DialogProps, context) {
     // computed
     const dialogWidth = computed((): string => {
       const width = props.width !== void 0 ? props.width : '';

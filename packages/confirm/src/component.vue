@@ -22,7 +22,7 @@
 
 import ModalMask from '{packages}/modal-mask';
 import Dialog from '{packages}/dialog';
-import { ref, computed } from 'vue';
+import {ref, computed, defineComponent} from 'vue';
 import {
   DialogInstance,
   DialogContext,
@@ -33,7 +33,7 @@ import {
   OnConfirmDialogClose
 } from 'types';
 
-export default {
+export default defineComponent({
   name: "LsConfirm",
   components: {
     LsModalMask: ModalMask,
@@ -86,16 +86,20 @@ export default {
     };
 
     return {
+      // refs
       instances,
+      // computed
       current,
       isShowModal,
+      // active
       isShowDialog,
       open,
       close,
+      // passive
       onDialogClose,
     };
   }
-}
+});
 </script>
 
 <style scoped>
