@@ -1,6 +1,6 @@
 <template>
   <template v-if="type === 'svg'">
-    <svg class="ls-icon-svg" aria-hidden="true">
+    <svg class="ls-icon-svg" aria-hidden="true" :class="name ? name + '-svg' : ''">
       <use :xlink:href="'#' + name"></use>
     </svg>
   </template>
@@ -12,7 +12,6 @@
 <script lang="ts">
 
 import './resources/iconfont.js';
-import './resources/iconfont.css';
 import { defineComponent, PropType } from 'vue';
 import { IconProps } from 'types';
 

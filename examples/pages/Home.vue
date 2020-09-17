@@ -2,7 +2,7 @@
   <div>
     <!--call-confirm-->
     <ul ref="list">
-      <li v-for="item in 500" :key="item">
+      <li v-for="item in 100" :key="item">
         <ls-button @click="openConfirm"><ls-icon name="ls-icon-loading"></ls-icon> click({{ item }})</ls-button>
       </li>
     </ul>
@@ -21,7 +21,7 @@ export default defineComponent({
   setup() {
     const list = ref(null);
 
-    const openConfirm = (): void => {
+    const openConfirm = () => {
       setTimeout(() => {
         confirm({
           title: String(Date.now()),
@@ -37,6 +37,10 @@ export default defineComponent({
           context.close();
         });
       }, 1000);
+    };
+
+    const object = {
+
     };
 
     return {

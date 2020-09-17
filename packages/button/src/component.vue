@@ -1,7 +1,7 @@
 <template>
   <button class="ls-button" :class="classes" @click="onClick">
     <slot name="prefix">
-      <i v-if="loading">loading</i>
+      <i v-if="loading" class="ls-icon-loading"></i>
       <i v-else-if="prefix" :class="prefix"></i>
     </slot>
     <slot>

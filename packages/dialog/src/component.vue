@@ -17,7 +17,9 @@
             </div>
             <ul class="ls-dialog-actions">
               <slot name="header-actions">
-                <li class="ls-dialog-action"><ls-icon name="ls-icon-no"></ls-icon></li>
+                <li class="ls-dialog-action">
+                  <ls-button shape="text" prefix="ls-icon-no" @click="onClickClose"></ls-button>
+                </li>
               </slot>
             </ul>
           </slot>
@@ -59,10 +61,9 @@
 <script lang="ts">
 
 import LsButton from '{packages}/button';
-import ModalContent from '{packages}/modal-content';
-import Icon from '{packages}/icon';
+import LsModalContent from '{packages}/modal-content';
 import { defineComponent, computed, ref, watch, onMounted, PropType } from 'vue';
-import { DialogProps, DialogButton, DialogClose, DialogContext, UpdateDialogButtons, DialogDefaultProps, OnClickDialogButton } from 'types';
+import { DialogProps, DialogButton, DialogClose, DialogContext, UpdateDialogButtons, DialogDefaultProps, OnClickDialogButton, DialogCallbackResult } from 'types';
 
 const defaults: DialogDefaultProps = () => {
   return {
@@ -80,9 +81,8 @@ const defaults: DialogDefaultProps = () => {
 export default defineComponent({
   name: "LsDialog",
   components: {
-    LsButton: LsButton,
-    LsModalContent: ModalContent,
-    lsIcon: Icon,
+    LsButton,
+    LsModalContent,
   },
   props: {
     show: {
@@ -191,7 +191,7 @@ export default defineComponent({
         close: close.bind(context, button),
         button: button,
       };
-      let result: boolean | Promise<boolean> = false;
+      let result: DialogCallbackResult = false;
 
       if ((!button.trigger || button.trigger === 'confirm') && props.onPromiseResolve) {
         props.onPromiseResolve(callbackContext);
@@ -228,6 +228,22 @@ export default defineComponent({
       if (props.onPromiseReject) props.onPromiseReject(callbackContext);
       if (props.closeOnClickModal) close();
     };
+    const onClickClose = () => {
+      const callbackContext: DialogContext = {
+        close: close,
+        source: 'close',
+      };
+      let result: DialogCallbackResult = true;
+
+      context.emit('click-close');
+      if (props.onPromiseReject) props.onPromiseReject(callbackContext);
+      if (props.onCancel) result = props.onCancel(callbackContext);
+
+      if (Object.prototype.toString.call(result) === '[object Promise]' && typeof result !== 'boolean') {
+        return result.then(bool => bool && close()).catch(() => void 0);
+      }
+      if (result !== false) close();
+    };
 
     // watchers
     let dialogButtons = ref<DialogButton[]>([]);
@@ -245,7 +261,8 @@ export default defineComponent({
       close,
       // passive methods
       onClickButton,
-      onClickModalContent
+      onClickClose,
+      onClickModalContent,
     };
   }
 });

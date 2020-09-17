@@ -24,7 +24,7 @@ export interface DialogStatus {
 export type DialogInstance = DialogOptions & DialogStatus;
 
 export interface DialogContext {
-  source: 'button' | 'modal';
+  source: 'button' | 'modal' | 'close';
   close: DialogClose;
   button?: DialogButton;
 }
@@ -32,13 +32,12 @@ export interface DialogButton extends Button {
   trigger?: 'click' | 'confirm' | 'cancel',
   onClick?: (
     context: DialogContext
-  ) => boolean | Promise<boolean>;
+  ) => DialogCallbackResult;
 }
 export interface DialogCallback {
-  (
-    context: DialogContext
-  ): boolean | Promise<boolean>;
+  (context: DialogContext): DialogCallbackResult;
 }
+export type DialogCallbackResult = boolean | Promise<boolean>;
 
 export interface DialogClose {
   (button?: DialogButton): void;
