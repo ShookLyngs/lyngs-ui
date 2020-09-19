@@ -22,25 +22,22 @@ export default defineComponent({
     const list = ref(null);
 
     const openConfirm = () => {
-      setTimeout(() => {
-        confirm({
-          title: String(Date.now()),
-          content: String(Date.now() * Math.floor(Math.random() * Math.pow(10, 10))),
-          width: '400px',
-          allowHtml: true,
-          closeOnClick: false,
-        }).then(async (context) => {
-          if (context.button) context.button.loading = true;
-          await async.timeout(1000);
-          context.close();
-        }).catch((context) => {
-          context.close();
-        });
-      }, 1000);
-    };
+      confirm({
+        title: String(Date.now()),
+        content: String(Date.now() * Math.floor(Math.random() * Math.pow(10, 10))),
+        width: '400px',
+        allowHtml: true,
+        closeOnClick: false,
+      }).then(async (context) => {
+        if (context.button) context.button.loading = true;
+        await async.timeout(1000);
+        context.close();
+      }).catch((context) => {
+        context.close();
+      });
+      /*setTimeout(() => {
 
-    const object = {
-
+      }, 1000);*/
     };
 
     return {

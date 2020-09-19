@@ -3,6 +3,7 @@
     <ls-modal-content v-if="show" @click="onClickModalContent">
       <div
         class="ls-dialog"
+        ref="dialog"
         :class="dialogClasses"
         :style="dialogStyle"
         @click.stop=""
@@ -63,7 +64,7 @@
 import LsButton from '{packages}/button';
 import LsModalContent from '{packages}/modal-content';
 import { defineComponent, computed, ref, watch, onMounted, PropType } from 'vue';
-import { DialogProps, DialogButton, DialogClose, DialogContext, UpdateDialogButtons, DialogDefaultProps, OnClickDialogButton, DialogCallbackResult } from 'types';
+import { DialogProps, DialogButton, DialogClose, DialogContext, UpdateDialogButtons, DialogDefaultProps, OnClickDialogButton, DialogCallbackResult, MousePosition } from 'types';
 
 const defaults: DialogDefaultProps = () => {
   return {
@@ -113,6 +114,9 @@ export default defineComponent({
       type: [ Number, String ],
       default: '',
     },
+    mousePosition: {
+      type: Object as PropType<DialogProps['mousePosition']>,
+    },
     allowHtml: {
       type: Boolean,
       default: false,
@@ -139,6 +143,9 @@ export default defineComponent({
     },
   },
   setup(props: DialogProps, context) {
+    // ref
+    const dialogRef = ref(null);
+
     // computed
     const dialogWidth = computed((): string => {
       const width = props.width !== void 0 ? props.width : '';
@@ -152,7 +159,10 @@ export default defineComponent({
       const style: {
         maxWidth?: string;
         width?: string;
-      } = {};
+        transformOrigin: string;
+      } = {
+        transformOrigin: ''
+      };
 
       const maxWidth = dialogMaxWidth;
       if (maxWidth.value) {
@@ -163,6 +173,12 @@ export default defineComponent({
       if (width.value) {
         style.width = width.value;
       }
+
+      style.transformOrigin = props.mousePosition ?
+        `${props.mousePosition.x}px ${props.mousePosition.y}px` :
+        '';
+
+      console.log(props.mousePosition, style.transformOrigin);
 
       return style;
     });
@@ -251,6 +267,8 @@ export default defineComponent({
     onMounted(() => updateButtons(props.buttons));
 
     return {
+      // refs,
+      dialogRef,
       // data
       dialogButtons,
       // computed

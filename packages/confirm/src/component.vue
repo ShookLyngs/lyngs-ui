@@ -30,8 +30,24 @@ import {
   ConfirmTemplate,
   OpenConfirm,
   CloseConfirm,
-  OnConfirmDialogClose
+  OnConfirmDialogClose,
+  MousePosition,
 } from 'types';
+
+let mousePosition: MousePosition | undefined;
+const getMousePosition = (event: MouseEvent) => {
+  mousePosition = {
+    x: event.pageX,
+    y: event.pageY,
+  };
+
+  setTimeout(() => {
+    mousePosition = void 0;
+  }, 1000);
+};
+if (window && window.document && window.document.documentElement) {
+  document.documentElement.addEventListener('click', getMousePosition);
+}
 
 export default defineComponent({
   name: "LsConfirm",
@@ -61,10 +77,15 @@ export default defineComponent({
 
     const open: OpenConfirm = (options) => {
       return new Promise<DialogContext>((resolve, reject) => {
-        const dialog = { ...template(), ...options, ...{
-          onPromiseResolve: resolve,
-          onPromiseReject: reject,
-        }};
+        const dialog = {
+          ...template(),
+          ...options,
+          ...{
+            onPromiseResolve: resolve,
+            onPromiseReject: reject,
+            mousePosition: mousePosition,
+          }
+        };
 
         instances.value.push(dialog);
       });

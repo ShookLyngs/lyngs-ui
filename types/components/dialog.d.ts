@@ -1,4 +1,5 @@
 import { Button } from "./button";
+import { MousePosition } from "../events/mouse";
 import { UnwrapRefSimple } from 'vue';
 
 export interface DialogProps {
@@ -9,6 +10,7 @@ export interface DialogProps {
   display?: 'flex' | 'inline';
   width?: number | string;
   maxWidth?: number | string;
+  mousePosition?: MousePosition;
   allowHtml?: boolean;
   closeOnClick?: boolean;
   closeOnClickModal?: boolean;
