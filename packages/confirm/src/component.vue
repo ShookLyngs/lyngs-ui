@@ -22,31 +22,21 @@
 
 import ModalMask from '{packages}/modal-mask';
 import Dialog from '{packages}/dialog';
-import {ref, computed, defineComponent} from 'vue';
-import {
-  DialogInstance,
-  DialogContext,
-  IsShowConfirmDialog,
-  ConfirmTemplate,
-  OpenConfirm,
-  CloseConfirm,
-  OnConfirmDialogClose,
-  MousePosition,
-} from 'types';
+import { ref, computed, defineComponent } from 'vue';
+import { DialogInstance, DialogContext, IsShowConfirmDialog, ConfirmTemplate, OpenConfirm, CloseConfirm, OnConfirmDialogClose, MousePosition, } from 'types';
 
-let mousePosition: MousePosition | undefined;
+let mousePosition: MousePosition | null = null;
 const getMousePosition = (event: MouseEvent) => {
   mousePosition = {
     x: event.pageX,
     y: event.pageY,
   };
-
   setTimeout(() => {
-    mousePosition = void 0;
-  }, 1000);
+    mousePosition = null;
+  }, 100);
 };
 if (window && window.document && window.document.documentElement) {
-  document.documentElement.addEventListener('click', getMousePosition);
+  document.documentElement.addEventListener('click', getMousePosition, true);
 }
 
 export default defineComponent({

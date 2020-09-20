@@ -6,6 +6,7 @@
         <ls-button @click="openConfirm"><ls-icon name="ls-icon-loading"></ls-icon> click({{ item }})</ls-button>
       </li>
     </ul>
+    <ls-dialog></ls-dialog>
   </div>
 </template>
 

@@ -1,6 +1,6 @@
 <template>
   <transition name="ls-scale">
-    <ls-modal-content v-if="show" @click="onClickModalContent">
+    <ls-modal-content v-if="show" :style="modalStyle" @click="onClickModalContent">
       <div
         class="ls-dialog"
         ref="dialog"
@@ -174,12 +174,6 @@ export default defineComponent({
         style.width = width.value;
       }
 
-      style.transformOrigin = props.mousePosition ?
-        `${props.mousePosition.x}px ${props.mousePosition.y}px` :
-        '';
-
-      console.log(props.mousePosition, style.transformOrigin);
-
       return style;
     });
     const dialogClasses = computed(() => {
@@ -191,6 +185,19 @@ export default defineComponent({
       }
 
       return classes;
+    });
+    const modalStyle = computed(() => {
+      const style: {
+        transformOrigin: string;
+      } = {
+        transformOrigin: ''
+      };
+
+      style.transformOrigin = props.mousePosition ?
+        `${props.mousePosition.x}px ${props.mousePosition.y}px` :
+        '';
+
+      return style;
     });
 
     // active methods
@@ -275,6 +282,7 @@ export default defineComponent({
       dialogMaxWidth,
       dialogStyle,
       dialogClasses,
+      modalStyle,
       // active methods
       close,
       // passive methods
